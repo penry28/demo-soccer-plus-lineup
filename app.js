@@ -68,7 +68,7 @@ function lineupSelected(members, lineup) {
         if (index === 0) {
             if (x.length === y.length) {
                 new_lineup[GK] = x;
-                new_lineup[GK] = member_sorted[DF];
+                new_lineup[DF] = member_sorted[DF];
             }
         }
 
@@ -89,7 +89,7 @@ function lineupSelected(members, lineup) {
             }
             if (x.length === y.length) {
                 new_lineup[DF] = x;
-                new_lineup[DF] = member_sorted[MF];
+                new_lineup[MF] = member_sorted[MF];
             }
         }
 
