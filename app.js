@@ -62,23 +62,24 @@ function lineupSelected(members, lineup) {
     let new_lineup = {};
 
     Object.keys(lineup).forEach((position, index) => {
-        const x = member_sorted[position];
-        const y = lineup[position];
+        let x = member_sorted[position];
+        let y = lineup[position];
 
         if (index === 0) {
             if (x.length === y.length) {
                 new_lineup[GK] = x;
-                new_lineup[DF] = member_sorted[DF];
+                // new_lineup[DF] = member_sorted[DF];
             }
         }
 
         if (index === 1) {
             if (x.length > y.length) {
                 const num_rm = x.length - y.length;
-                const new_members_curr = x.slice(num_rm, x.length);
-                const new_members_next = x.slice(0, num_rm);
+                const new_members_curr = x.slice(0, x.length - num_rm);
+                const new_members_next = x.slice(-num_rm);
                 new_lineup[DF] = new_members_curr;
-                new_lineup[MF] = new_members_next;
+                let new_data = [ ...new_members_next, ...member_sorted[MF]];
+                new_lineup[MF] = new_data;
             }
             if (x.length < y.length) {
                 const num_rm = y.length - x.length;
@@ -109,7 +110,8 @@ function lineupSelected(members, lineup) {
                 new_lineup[FW] = new_members_next;
             }
             if (x.length === y.length) {
-                new_lineup[MF] = x;
+                // console.log(x);
+                // new_lineup[MF] = x;
                 new_lineup[FW] = member_sorted[FW];
             }
         }
@@ -125,5 +127,9 @@ function lineupSelected(members, lineup) {
 
     return new_lineup;
 }
+const data = lineupSelected(responses.starting, lineup_343x);
 
-console.log(lineupSelected(responses.starting, lineup_442));
+console.log(data[GK]);
+console.log(data[DF]);
+console.log(data[MF]);
+console.log(data[FW]);
