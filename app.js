@@ -1,22 +1,22 @@
 const lineup_343 = {
-    0: ['GK'],
-    1: ['DF', 'DF', 'DF'],
-    2: ['MF', 'MF', 'MF', 'MF'],
-    3: ['FW', 'FW', 'FW']
+    1: ['GK'],
+    2: ['DF', 'DF', 'DF'],
+    3: ['MF', 'MF', 'MF', 'MF'],
+    4: ['FW', 'FW', 'FW']
 };
 
 const lineup_442 = {
-    0: ['GK'],
-    1: ['DF', 'DF', 'DF', 'DF'],
-    2: ['MF', 'MF', 'MF', 'MF'],
-    3: ['FW', 'FW'],
+    1: ['GK'],
+    2: ['DF', 'DF', 'DF', 'DF'],
+    3: ['MF', 'MF', 'MF', 'MF'],
+    4: ['FW', 'FW'],
 };
 
 const lineup_4231 = {
-    0: ['GK'],
-    1: ['DF', 'DF', 'DF', 'DF'],
-    2: ['MF', 'MF', 'MF', 'MF', 'MF'],
-    3: ['FW'],
+    1: ['GK'],
+    2: ['DF', 'DF', 'DF', 'DF'],
+    3: ['MF', 'MF', 'MF', 'MF', 'MF'],
+    4: ['FW'],
 };
 
 const lineup_343x = {
@@ -51,26 +51,36 @@ function lineupSelected(members, lineup) {
     const lineup_default = ['GK', 'DF', 'MF', 'FW'];
     let member_sorted  = {};
     lineup_default.forEach((item, index) => {
-        member_sorted[index] = members.filter(member => member.position === item);
+        member_sorted[index + 1] = members.filter(member => member.position === item);
     });
 
     let new_lineup = {};
 
-    Object.keys(lineup).forEach(index => {
-        let x = member_sorted[index];
-        let y = lineup[index];
+    Object.keys(lineup).forEach((index, _) => {
+        index = +index;
+        let x = member_sorted[+index];
+        let y = lineup[+index];
+
         if (x.length > y.length) {
             const numRm = x.length - y.length;
-            const neMb  = x.slice(0, x.length - numRm);
-            const rmMm  = x.slice(x.length - numRm)
+            const newMb  = x.slice(0, x.length - numRm);
+            const remMm  = x.slice(x.length - numRm)
 
-
+            new_lineup[index] = newMb;
+            member_sorted[+index + 1].unshift(...remMm);
         } else if (x.length < y.length) {
+            const numRm = y.length - x.length;
+            const newMb = x.slice(0, numRm);
+            const oldMb = x.slice(numRm, x.length);
 
+            new_lineup[index] = [...x[index], ...newMb];
+            member_sorted[+index + 1] = oldMb;
+        } else {
+            new_lineup[index] = x;
         }
     });
-    // console.log(new_lineup);
-    // return [];
+
+    console.log(new_lineup);
 }
 
-console.log(lineupSelected(responses.starting, lineup_343));
+lineupSelected(responses.starting, lineup_343);
