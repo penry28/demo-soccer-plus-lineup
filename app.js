@@ -111,12 +111,14 @@ function lineupSelected(members, lineup) {
             }
         }
 
-        if (index === 3) {
-            console.log(3);
-        }
+        if (index === 3) {}
     });
 
-    return [];
+    Object.keys({...new_lineup}).forEach(key => {
+        new_lineup[key] = new_lineup[key].map(item => ({...item, position: key}));
+    });
+
+    return new_lineup;
 }
 
-lineupSelected(responses.starting, lineup_4231);
+console.log(lineupSelected(responses.starting, lineup_4231));
