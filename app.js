@@ -68,6 +68,7 @@ function lineupSelected(members, lineup) {
         if (index === 0) {
             if (x.length === y.length) {
                 new_lineup[GK] = x;
+                new_lineup[GK] = member_sorted[DF];
             }
         }
 
@@ -88,6 +89,7 @@ function lineupSelected(members, lineup) {
             }
             if (x.length === y.length) {
                 new_lineup[DF] = x;
+                new_lineup[DF] = member_sorted[MF];
             }
         }
 
@@ -107,11 +109,14 @@ function lineupSelected(members, lineup) {
                 new_lineup[FW] = new_members_next;
             }
             if (x.length === y.length) {
-                new_lineup[DF] = x;
+                new_lineup[MF] = x;
+                new_lineup[FW] = member_sorted[FW];
             }
         }
 
-        if (index === 3) {}
+        if (index === 3) {
+
+        }
     });
 
     Object.keys({...new_lineup}).forEach(key => {
@@ -121,4 +126,4 @@ function lineupSelected(members, lineup) {
     return new_lineup;
 }
 
-console.log(lineupSelected(responses.starting, lineup_4231));
+console.log(lineupSelected(responses.starting, lineup_442));
