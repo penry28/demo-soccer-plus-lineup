@@ -1,29 +1,34 @@
+const GK = 'GK';
+const DF = 'DF';
+const MF = 'MF';
+const FW = 'FW';
+
 const lineup_343 = {
-    1: ['GK'],
-    2: ['DF', 'DF', 'DF'],
-    3: ['MF', 'MF', 'MF', 'MF'],
-    4: ['FW', 'FW', 'FW']
+    GK: ['GK'],
+    DF: ['DF', 'DF', 'DF'],
+    MF: ['MF', 'MF', 'MF', 'MF'],
+    FW: ['FW', 'FW', 'FW']
 };
 
 const lineup_442 = {
-    1: ['GK'],
-    2: ['DF', 'DF', 'DF', 'DF'],
-    3: ['MF', 'MF', 'MF', 'MF'],
-    4: ['FW', 'FW'],
+    GK: ['GK'],
+    DF: ['DF', 'DF', 'DF', 'DF'],
+    MF: ['MF', 'MF', 'MF', 'MF'],
+    FW: ['FW', 'FW'],
 };
 
 const lineup_4231 = {
-    1: ['GK'],
-    2: ['DF', 'DF', 'DF', 'DF'],
-    3: ['MF', 'MF', 'MF', 'MF', 'MF'],
-    4: ['FW'],
+    GK: ['GK'],
+    DF: ['DF', 'DF', 'DF', 'DF'],
+    MF: ['MF', 'MF', 'MF', 'MF', 'MF'],
+    FW: ['FW'],
 };
 
 const lineup_343x = {
-    1: ['GK'],
-    2: ['DF', 'DF', 'DF'],
-    3: ['MF', 'MF', 'MF', 'MF'],
-    4: ['FW', 'FW', 'FW']
+    GK: ['GK'],
+    DF: ['DF', 'DF', 'DF'],
+    MF: ['MF', 'MF', 'MF', 'MF'],
+    FW: ['FW', 'FW', 'FW']
 };
 
 const responses = {
@@ -50,37 +55,68 @@ const responses = {
 function lineupSelected(members, lineup) {
     const lineup_default = ['GK', 'DF', 'MF', 'FW'];
     let member_sorted  = {};
-    lineup_default.forEach((item, index) => {
-        member_sorted[index + 1] = members.filter(member => member.position === item);
+    lineup_default.forEach((item, _) => {
+        member_sorted[item] = members.filter(member => member.position === item);
     });
 
     let new_lineup = {};
 
-    Object.keys(lineup).forEach((index, _) => {
-        index = +index;
-        let x = member_sorted[+index];
-        let y = lineup[+index];
+    Object.keys(lineup).forEach((position, index) => {
+        const x = member_sorted[position];
+        const y = lineup[position];
 
-        if (x.length > y.length) {
-            const numRm = x.length - y.length;
-            const newMb  = x.slice(0, x.length - numRm);
-            const remMm  = x.slice(x.length - numRm)
+        if (index === 0) {
+            if (x.length === y.length) {
+                new_lineup[GK] = x;
+            }
+        }
 
-            new_lineup[index] = newMb;
-            member_sorted[+index + 1].unshift(...remMm);
-        } else if (x.length < y.length) {
-            const numRm = y.length - x.length;
-            const newMb = x.slice(0, numRm);
-            const oldMb = x.slice(numRm, x.length);
+        if (index === 1) {
+            if (x.length > y.length) {
+                const num_rm = x.length - y.length;
+                const new_members_curr = x.slice(num_rm, x.length);
+                const new_members_next = x.slice(0, num_rm);
+                new_lineup[DF] = new_members_curr;
+                new_lineup[MF] = new_members_next;
+            }
+            if (x.length < y.length) {
+                const num_rm = y.length - x.length;
+                const new_members_curr = member_sorted[MF].slice(0, num_rm);
+                const new_members_next = member_sorted[MF].slice(num_rm, member_sorted[MF].length);
+                new_lineup[DF] = [...x, ...new_members_curr];
+                new_lineup[MF] = new_members_next;
+            }
+            if (x.length === y.length) {
+                new_lineup[DF] = x;
+            }
+        }
 
-            new_lineup[index] = [...x[index], ...newMb];
-            member_sorted[+index + 1] = oldMb;
-        } else {
-            new_lineup[index] = x;
+        if (index === 2) {
+            if (x.length > y.length) {
+                const num_rm = x.length - y.length;
+                const new_members_curr = x.slice(num_rm, x.length);
+                const new_members_next = x.slice(0, num_rm);
+                new_lineup[DF] = new_members_curr;
+                new_lineup[MF] = new_members_next;
+            }
+            if (x.length < y.length) {
+                const num_rm = y.length - x.length;
+                const new_members_curr = member_sorted[FW].slice(0, num_rm);
+                const new_members_next = member_sorted[FW].slice(num_rm, member_sorted[FW].length);
+                new_lineup[MF] = [...x, ...new_members_curr];
+                new_lineup[FW] = new_members_next;
+            }
+            if (x.length === y.length) {
+                new_lineup[DF] = x;
+            }
+        }
+
+        if (index === 3) {
+            console.log(3);
         }
     });
 
-    console.log(new_lineup);
+    return [];
 }
 
-lineupSelected(responses.starting, lineup_343);
+lineupSelected(responses.starting, lineup_4231);
